@@ -8,24 +8,31 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- datasource connection pool -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="jdbcUrl"    value="jdbc:oracle:thin:@127.0.0.1:1521:xe" />
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<property name="jdbcUrl"    value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:xe" />
 		<property name="username"   value="hr" />
 		<property name="password"   value="hr" />
 	</bean>
+	<!-- 정보를 담아주는 코드 -->
+	<!-- 빈 칸이 있으면 오류남 -->
 
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" 
       destroy-method="close">
   		<constructor-arg ref="hikariConfig" />
 	</bean>
 	<!-- bean을 추가해주지 않으면 HikariCP가 동작하지 않는다 -->
+	<!-- connection pool을 만들어주는 코드 -->
+	<!-- 클래스를 잘 확인해야 한다, 클래스에 따라 프로퍼티가 달라진다 -->
 	
 	<!-- mybatis  SqlSessionFactory -->
 	<!-- id 값을 주는 것은 선택이다, 주지않아도 알아서 동작한다  -->
 	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
 	  <property name="dataSource" ref="dataSource"/>
+	  <property name="configLocation" value="classpath:mybatis-config.xml"></property>
 	</bean>
+	<!-- mapper.xml에서 쿼리문을 가져와서 실행시켜주는 코드 -->
 	
 	<mybatis-spring:scan base-package="com.yedam.app.**.mapper"/>
 	<!-- 기능별 하위 패키지를 스캔해주세요 -->
+	<!-- Interpace로 DAO, build path를 만들어주는 코드 -->
 </beans>

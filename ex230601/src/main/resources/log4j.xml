@@ -32,9 +32,23 @@
 		<level value="info" />
 	</logger>
 
+	<!-- trace < debug < info < warn < error < fetal -->
+	<!-- 지정된 레벨 이하는 출력 안됨 -->
+	<logger name="jdbc.audit">
+		<level value="warn" />
+	</logger>
+
+	<logger name="jdbc.resultset">
+		<level value="warn" />
+	</logger>
+
+	<logger name="jdbc.connection">
+		<level value="warn" />
+	</logger>
+	
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	
