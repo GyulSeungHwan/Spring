@@ -29,7 +29,7 @@
 						<!-- 오라클에서 컬럼의 이름이 대문자로 뜨기때문에 대문자로 적어줘야한다 -->
 						<!-- alias를 mapper.xml에 적어주면 alias를 적으면 된다 -->
 					</c:forEach>
-				</select><br>
+				 </select><br>
 			<button>저장</button>
 		</form>
 		<script>
