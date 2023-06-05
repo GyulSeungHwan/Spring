@@ -18,7 +18,7 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="prefix" value="/WEB-INF/views/" /> <!-- WEB-INF 앞의 /(루트)는 webapp을 말한다 -->
 		<beans:property name="suffix" value=".jsp" />
 		<!-- views 밑에 jsp 파일을 만들어야 하는 이유(경로 설정을 바꾸려면 여기를 바꿔야 한다) -->
 	</beans:bean>

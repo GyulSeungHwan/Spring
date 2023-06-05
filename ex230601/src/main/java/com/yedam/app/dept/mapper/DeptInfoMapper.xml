@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.dept.mapper.DeptInfoMapper">
+	
+	<!-- 공통 -->
+	<sql id="deptSelect">
+		select department_id, department_name, manager_id, location_id
+		from departments
+		<!-- mybatis를 사용할 때는 *(아스타)를 권장하지 않는다 -->
+	</sql>
+	
+	<!-- 전체조회 -->
+	<select id="selectAllDept" resultType="DeptInfoVO">
+	<!-- select는 parameterType은 적어주지 않아도 되지만 resultType은 적는걸 권장하는 편이다 -->
+	<!-- resultType은 적지 않아도 찾아가긴 하지만 확실하게 해주기 위해서 적어준다고 생각하면 된다 -->
+		<include refid="deptSelect" />
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="selectOneDept" resultType="DeptInfoVO">
+		<include refid="deptSelect" />
+		where department_id = #{departmentId}
+	</select>
+	
+	<!-- insert, update, delete의 resultType은 적어주지 
+			않아도 되지만 parameterType은 적어줘야 한다 -->
+	<!-- 등록 -->
+	<insert id="insertDeptInfo" parameterType="DeptInfoVO">
+		<selectKey keyProperty="departmentId" resultType="int" order="BEFORE">
+		<!-- selectKey에 필수적으로 들어가야 하는 것들 = keyProperty, resultType, order -->
+			select nvl(max(department_id), 0) + 1
+			from departments
+		</selectKey>
+		insert into departments(department_id, department_name, manager_id, location_id)
+		values(#{departmentId}, #{departmentName}, #{managerId}, #{locationId})
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateDeptInfo" parameterType="DeptInfoVO">
+		update departments
+		<set>
+			<if test="departmentName != null and departmentName.equals('')">
+				department_name = #{departmentName}
+			</if>
+			<if test="managerId > 0">
+				, manager_id = #{managerId}
+			</if>
+			<if test="locationId > 0">
+				, location_id = #{locationId}
+			</if>
+			<!-- <= : lte -->
+			<if test="locationId lte 0">
+				, location_id = 1000
+				<!-- 오류가 날 수 있기 때문에 하나의 컬럼은 들어가게끔 해주는 것이 좋다 -->
+			</if>
+		</set>
+		where department_id = #{departmentId}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteDeptInfo" parameterType="int">
+		delete from departments
+		where department_id = #{departmentId}
+	</delete>
+	
+</mapper>
