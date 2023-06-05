@@ -41,7 +41,7 @@
 	<update id="updateDeptInfo" parameterType="DeptInfoVO">
 		update departments
 		<set>
-			<if test="departmentName != null and departmentName.equals('')">
+			<if test="departmentName != null and !departmentName.equals('')">
 				department_name = #{departmentName}
 			</if>
 			<if test="managerId > 0">
