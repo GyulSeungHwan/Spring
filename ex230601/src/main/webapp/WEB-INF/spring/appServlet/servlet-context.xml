@@ -20,11 +20,26 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" /> <!-- WEB-INF 앞의 /(루트)는 webapp을 말한다 -->
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2" /> <!-- 우선순위를 후순위로 주려고 value에 2를 주었다 -->
 		<!-- views 밑에 jsp 파일을 만들어야 하는 이유(경로 설정을 바꾸려면 여기를 바꿔야 한다) -->
 	</beans:bean>
 	
-	<context:component-scan base-package="com.yedam.app" />
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions">
+	  		<beans:list>
+	    		<beans:value>/WEB-INF/tiles.xml</beans:value>
+	  		</beans:list>
+		</beans:property>
+ 	</beans:bean>
 	
+	<context:component-scan base-package="com.yedam.app" >
+		<context:exclude-filter type="aspectj" expression="com.yedam.app.aop.*" />
+	</context:component-scan>
+	<!-- 실행시켰을때 com.yedam.app.aop 패키지를 읽어들이는걸 제외시키는 것이다 -->
 	
+	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+		<!-- ViewResolver가 위에도 있기때문에 (두 개가 있기때문에) 우선순위를 정해주어야 한다 (우선순위를 정해주지 않으면 오류가 날 것이다) -->
+		<beans:property name="order" value="1" />
+	</beans:bean>
 	
 </beans:beans>

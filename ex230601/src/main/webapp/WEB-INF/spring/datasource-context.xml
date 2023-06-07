@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<context:property-placeholder location="classpath:config/db.properties"/> <!-- 나눈 파일 읽어들이기 -->
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- datasource connection pool -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value="${driver}" />
+		<property name="jdbcUrl"    value="${url}" />
+		<property name="username"   value="${name}" />
+		<property name="password"   value="${password}" />
+	</bean>
+	<!-- 정보를 담아주는 코드 -->
+	<!-- 빈 칸이 있으면 오류남 -->
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" 
+      destroy-method="close">
+  		<constructor-arg ref="hikariConfig" />
+	</bean>
+	<!-- bean을 추가해주지 않으면 HikariCP가 동작하지 않는다 -->
+	<!-- connection pool을 만들어주는 코드 -->
+	<!-- 클래스를 잘 확인해야 한다, 클래스에 따라 프로퍼티가 달라진다 -->
+	
+	<!-- mybatis  SqlSessionFactory -->
+	<!-- id 값을 주는 것은 선택이다, 주지않아도 알아서 동작한다  -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+	  <property name="dataSource" ref="dataSource"/>
+	  <property name="configLocation" value="classpath:config/mybatis-config.xml"></property>
+	</bean>
+	<!-- mapper.xml에서 쿼리문을 가져와서 실행시켜주는 코드 -->
+	
+	<!-- Transaction Manager 설정 -->
+	<bean id="transactionManager"  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:annotation-driven/>
+	
+	<mybatis-spring:scan base-package="com.yedam.app.**.mapper" />
+	<!-- 기능별 하위 패키지를 스캔해주세요 -->
+	<!-- Interpace로 DAO, build path를 만들어주는 코드 -->
+</beans>

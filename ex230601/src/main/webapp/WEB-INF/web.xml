@@ -8,7 +8,8 @@
 		and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<!-- <param-value>/WEB-INF/spring/root-context.xml</param-value> -->
+		<param-value>/WEB-INF/spring/*-context.xml</param-value> <!-- root-context를 나눌때 여러개의 경로가 필요하다면 *(아스타)를 쓴다 -->
 		<!-- 어디에 만들면 되는지 경로 설정해주는 것 -->
 	</context-param>
 
