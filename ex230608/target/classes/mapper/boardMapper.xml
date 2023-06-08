@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.board.mapper.BoardMapper">
+	
+	<sql id="boardSelect">
+		select bno, title, contents, writer, regdate, updatedate, image
+		from board
+	</sql>
+	
+	<!-- 전체조회 -->
+	<select id="selectBoardList" resultType="BoardVO">
+		<include refid="boardSelect" />
+		order by bno
+		<!-- 게시판은 정렬을 해줘야한다 -->
+	</select>
+	
+	<!-- 단건조회 : 조건 1) 글번호, 2) 작가 -->
+	<!-- 글번호는 필수로 들어가야하지만 작가는 여러개의 책이 있을 수 있기 때문에 있거나 없거나 상관없다 -->
+	<select id="selectBoardInfo" resultType="BoardVO">
+		<include refid="boardSelect" />
+		<where>
+			<if test="writer != null and !writer.equdals('')">
+				writer = #{writer} and
+			</if>
+			bno = #{bno}
+		</where>
+	</select>
+	
+	<!-- 등록 : 필수와 옵션 -->
+	<!-- max는 아무 값도 없을때 null을 반환해서 nvl으로 null처리를 해주는 것이다 -->
+	<insert id="insertBoard" parameterType="BoardVO">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			select nvl(max(bno), 0) + 1
+			from board
+		</selectKey>
+		insert into board(bno, title, contents, writer <if test="image != null and !image.equals('')">, image</if>)
+		values(#{bno}, #{title}, #{contents}, #{writer} <if test="image !=null and !image.equals('')">, #{image}</if>)
+	</insert>
+	<!-- ,(콤마)때문에 미완성 쿼리문이 될 수 있다는걸 조심해야 된다 -->
+	
+	<!-- 수정 : 대상 (제목, 내용, 이미지, 수정날짜(반드시변경돼야함)) -->
+	<update id="updateBoard" parameterType="BoardVO">
+		update board
+		<set>
+			<if test="title != null and !title.equals('')">
+				title = #{title}
+			</if>
+			<if test="contents != null and !contents.equals('')">
+				, contents = #{contents}
+			</if>
+			<if test="image != null and !image.equals('')">
+				, image = #{image}
+			</if>
+			<if test="updatedate != null">
+				, updatedate = #{updatedate}
+			</if>
+			<if test="updatedate == null">
+				, updatedate = sysdate
+			</if>
+		</set>
+		where bno = #{bno}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteBoard" parameterType="boardVO">
+		delete from board
+		where bno = #{bno}
+	</delete>
+	
+</mapper>
