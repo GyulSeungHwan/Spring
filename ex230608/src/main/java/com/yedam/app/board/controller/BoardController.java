@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.app.board.service.BoardService;
@@ -48,21 +50,28 @@ public class BoardController {
 	
 	// 수정 - 페이지 : URI - boardUpdate, RETURN - board/boardUpdate
 	@GetMapping("boardUpdate")
-	public String boardUpdateForm() {
+	public String boardUpdateForm(BoardVO boardVO, Model model) {
+		BoardVO findBoard = boardService.getBoardInfo(boardVO);
+		model.addAttribute("board", findBoard);
 		return "board/boardUpdate";
 	}
 	
 	// 수정 - 처리 : URI - boardUpdate, RETURN - 성공여부만 반환
 	@PostMapping("boardUpdate")
-	public String boardUpdate(BoardVO boardVO) {
-		return "success";
+	@ResponseBody
+	public String boardUpdate(@RequestBody BoardVO boardVO) {
+		int result = boardService.updateBoardInfo(boardVO);
+		if(result == 1) {
+			return "success";
+		} else {
+			return "false";
+		}
 	}
 	
 	// 삭제 : URI - boardDelete, RETURN - 전체조회 다시 호출
 	@GetMapping("boardDelete")
-	public String boardDelete(int boardNo) {
-		System.out.println("aaaaaaaaa : " + boardNo);
-		boardService.deleteBoardInfo(boardNo);
+	public String boardDelete(int bno) {
+		boardService.deleteBoardInfo(bno);
 		return "redirect:boardList";
 	}
 }

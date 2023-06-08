@@ -33,7 +33,7 @@
 			<td>${board.regdate}</td>
 		</tr>
 	</table>
-	<button type="button" onclick="location.href='boardUpdate'">수정</button>
+	<button type="button" onclick="location.href='boardUpdate?bno=${board.bno}'">수정</button>
 	<button type="button" onclick="location.href='boardDelete?bno=${board.bno}'">삭제</button>
 </body>
 </html>
