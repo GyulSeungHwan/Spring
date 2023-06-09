@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,14 +35,14 @@
 			</tr>
 			<tr>
 				<th>수정날짜</th>
-				<td><input type="date" name="updatedate" value="${board.updatedate}"></td>
+				<td><input type="date" name="updatedate" value="<fmt:formatDate value="${board.updatedate}" pattern="yyyy-MM-dd" />"></td>
 			</tr>
 		</table>
 		<button type="submit">수정</button>
-		<button type="button" onclick="location.href='boardList'">취소</button>
+		<button type="button" onclick="location.href='boardInfo?bno=${board.bno}'">취소</button>
 	</form>
 	<script>
-		document.querySelector('button[type="submit"]').addEventListener('click', function(e) {
+/* 		document.querySelector('button[type="submit"]').addEventListener('click', function(e) {
 			let data = {
 				'bno' : updateForm.bno.value,
 				'title' : updateForm.title.value,
@@ -64,7 +65,27 @@
 					location.href="boardList";
 			})
 			.catch(err => console.log(err))
-		})
+		}) */
+		
+		function updateAjax(e) {
+			let boardData = new FormData(document.querySelector("[name='updateForm']")); // 객체 형태로 가지만 json타입 아님
+			
+			fetch(updateForm.action, {
+				method: 'post',
+				body: boardData
+			})
+			.then(response => response.json())
+			.then(data => {
+				let message = 
+				'결과 : ' + data.result +
+				', 게시글 번호 : ' + data['board_no'];
+				alert(message);
+			})
+			.catch(err => console.log(err));
+			
+		}
+		
+		document.querySelector('button[type="submit"]').addEventListener('click', updateAjax);
 	</script>
 </body>
 </html>

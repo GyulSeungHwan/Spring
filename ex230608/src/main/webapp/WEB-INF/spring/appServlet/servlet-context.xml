@@ -8,12 +8,14 @@
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<context:property-placeholder location="classpath:config/app.properties"/>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/images/**" location="file:///c://upload/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -33,6 +35,10 @@
  	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
 		<!-- ViewResolver가 위에도 있기때문에 (두 개가 있기때문에) 우선순위를 정해주어야 한다 (우선순위를 정해주지 않으면 오류가 날 것이다) -->
 		<beans:property name="order" value="1" />
+	</beans:bean>
+	
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	</beans:bean>
 	
 	<context:component-scan base-package="com.yedam.app" />

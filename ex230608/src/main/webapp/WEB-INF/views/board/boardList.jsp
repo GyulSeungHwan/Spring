@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,7 @@
 <title>게시판 목록</title>
 </head>
 <body>
-	<a href="boardInsert">등록</a>
+	<!-- <a href="boardInsert">등록</a> -->
 	<table>
 		<thead>
 			<tr>
@@ -24,7 +25,7 @@
 					<td>${board.bno}</td>
 					<td>${board.title}</td>
 					<td>${board.writer}</td>
-					<td>${board.regdate}</td>
+					<td><fmt:formatDate value="${board.regdate}" pattern="yy년 MM월 dd일" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>

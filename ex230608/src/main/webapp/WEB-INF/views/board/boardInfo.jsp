@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,11 +28,19 @@
 		</tr>
 		<tr>
 			<th>첨부파일</th>
-			<td>${board.image}</td>
+			<c:choose>
+				<c:when test="${not empty board.image}">
+					<td><img src='<c:url value="/resources/images/${board.image}" />'></td>
+					<!-- c:url - contextPath 대신 써준것 -->
+				</c:when>
+				<c:otherwise>
+					<td>파일없음</td>
+				</c:otherwise>
+			</c:choose>
 		</tr>
 		<tr>
 			<th>작성일자</th>
-			<td>${board.regdate}</td>
+			<td><fmt:formatDate value="${board.regdate}" pattern="yyyy년 MM월 dd일" /></td>
 		</tr>
 	</table>
 	<button type="button" onclick="location.href='boardUpdate?bno=${board.bno}'">수정</button>

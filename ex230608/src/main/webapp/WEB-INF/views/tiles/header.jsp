@@ -98,25 +98,17 @@
 
 				<ul
 					class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-					<li><a href="#" class="nav-link text-secondary"> <svg
+					<li><a href="${pageContext.request.contextPath}" class="nav-link text-secondary"> <svg
 								class="bi d-block mx-auto mb-1" width="24" height="24">
 								<use xlink:href="#home" /></svg> Home
 					</a></li>
-					<li><a href="#" class="nav-link text-white"> <svg
+					<li><a href="${pageContext.request.contextPath}/boardList" class="nav-link text-white"> <svg
 								class="bi d-block mx-auto mb-1" width="24" height="24">
-								<use xlink:href="#speedometer2" /></svg> Dashboard
+								<use xlink:href="#speedometer2" /></svg> 게시판 조회
 					</a></li>
-					<li><a href="#" class="nav-link text-white"> <svg
+					<li><a href="${pageContext.request.contextPath}/boardInsert" class="nav-link text-white"> <svg
 								class="bi d-block mx-auto mb-1" width="24" height="24">
-								<use xlink:href="#table" /></svg> Orders
-					</a></li>
-					<li><a href="#" class="nav-link text-white"> <svg
-								class="bi d-block mx-auto mb-1" width="24" height="24">
-								<use xlink:href="#grid" /></svg> Products
-					</a></li>
-					<li><a href="#" class="nav-link text-white"> <svg
-								class="bi d-block mx-auto mb-1" width="24" height="24">
-								<use xlink:href="#people-circle" /></svg> Customers
+								<use xlink:href="#table" /></svg> 게시글 등록
 					</a></li>
 				</ul>
 			</div>
