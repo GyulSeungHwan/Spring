@@ -21,8 +21,8 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<BookVO> getBookByRent(int[] rent) {
-		return null;
+	public List<BookVO> getBookByRent() {
+		return mapper.getBookByRent();
 	}
 
 	@Override

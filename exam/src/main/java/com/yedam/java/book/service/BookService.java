@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BookService {
 	public List<BookVO> getBookList();
-	public List<BookVO> getBookByRent(int[] rent);
+	public List<BookVO> getBookByRent();
 	int insert(BookVO vo);
 	String test();
 }

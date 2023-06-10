@@ -21,6 +21,12 @@ public class BookController {
 		return "book/bookList";
 	}
 	
+	@GetMapping("rentList")
+	public String rentList(Model model) {
+		model.addAttribute("rentList", bookService.getBookByRent());
+		return "book/rentList";
+	}
+	
 	@GetMapping("bookInsert")
 	public String bookInsertForm(Model model) {
 		model.addAttribute("bookNo", bookService.test());
