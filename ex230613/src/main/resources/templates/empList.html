@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<!-- 자바스크립트가 가지고있는 태그 라이브러리와 같다고 생각하면 된다 -->
+<head>
+<meta charset="UTF-8">
+<title>전체 사원 조회</title>
+<script th:inline="javascript">
+	function getCtx() {
+		return /*[[${#httpServletRequest.getContextPath()}]]*/'';
+		// 주석을 제거한다면 자바스크립트에선 받아들일 수 없는 코드가 된다
+		// ''(따옴표)를 넣어주는 이유는 안 붙을 수도 있어서 넣어주는 것이다
+	}
+</script>
+</head>
+<body>
+	<div>
+		<button type="button" th:onclick="|location.href='@{/empInsert}'|" th:text='등록' />
+		<table>
+			<thead>
+				<tr>
+					<th>employee_id</th>
+					<th>first_name</th>
+					<th>job_id</th>
+					<th>hire_date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="empInfo, stat : ${empList}">
+					<tr th:id="${stat.index}" 
+						th:onclick="|location.href='@{/empInfo(employeeId=${empInfo.employeeId})}'|">
+						<!-- || = 템플릿 문법, get방식일때만 이렇게 쓴다(post방식 일때는 데이터를 넘길 필요가 없어서) -->
+						<td th:text="${empInfo.employeeId}" />
+						<td th:text="${empInfo.firstName}" />
+						<!-- 위 아래가 다른 방식으로 같은 결과를 불러들임 -->
+						<td>[[${empInfo.jobId}]]</td>
+						<td>[[${#dates.format(empInfo.hireDate, 'yyyy년 MM월 dd일')}]]</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
