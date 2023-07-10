@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{user/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	.oddbg {
+		background-color : orange;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="empInsertDiv"></div>
+		
+		<p th:text="${'Welcome to our <b>fantastic</b> grocery store!'}">Welcome to our grocery store!</p> <!-- innerText -->
+		<p th:utext="${'Welcome to our <b>fantastic</b> grocery store!'}">Welcome to our grocery store!</p> <!-- innerHTML -->
+		
+		전체사원수 : [[${#lists.size(empList)}]]
+		전체사원수 : <span th:text="${#lists.size(empList)}"></span>
+		<table border="1">
+			<thead>
+				<tr>
+					<td>사번</td>
+					<td>이름</td>
+					<td>부서</td>
+					<td>입사일자</td>
+					<td>급여</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="emp, es : ${empList}" th:class="${es.odd} ? oddbg : _">
+				<!-- 기본은 empStat가 되지만 es라고 지정해줬다 -->
+					<td>[[${es.count}]] 
+					<!-- <a th:href="@{empInfo(employeeId=${emp.employeeId}, name=${emp.firstName})}">[[${emp.employeeId}]]</a> -->
+					<a th:href="|javascript : empUpdate([[${emp.employeeId]])|">[[${emp.employeeId}]]</a>
+					<a th:href="@{empInfo/{id}(id=${emp.employeeId})}">[[${emp.employeeId}]]</a>
+					</td>
+					<td th:text="|${emp.firstName} ${emp.lastName}|">king smith</td> <!-- + ' ' + 대신 따옴표 안에 || 써줬다 -->
+					<td th:text="${emp.departmentId}">개발</td>
+					<td th:text="${#dates.format(emp.hireDate, 'yyyy/MM/dd')}">2020/12/01</td>
+					<!-- <td th:text="${#numbers.formatCurrency(emp.salary == null ? 0 : emp.salary)}">30000</td> -->
+					<td th:text="${#numbers.formatDecimal(emp.salary, 3, 2)}">30000</td>
+				</tr>
+			</tbody>
+		</table>
+		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+		<script>
+			function empUpdate(id) {
+				$.ajax(`/employees/${id}`, {
+					dateType : "html"
+					})
+					.done(function(result) {
+						$("#empInsertDiv").html(JSON.stringify(result))
+					})				
+			}
+			/* $("#empInsertDiv").load("/empInsert", null, function() {
+				alert('load')
+			}) */
+			/* $.ajax("/empInsert", {
+				dataType: "json"
+			})
+			.done(function(result) {
+				$("#empInsertDiv").html(result);
+			}) */
+			$.ajax("/employees/100", {
+				dataType: "json"
+			})
+			.done(function(result) {
+				console.log(typeof result)
+				$("#empInsertDiv").html(JSON.stringify(result))
+			})
+		</script>
+	</div>
+</body>
+</html>
