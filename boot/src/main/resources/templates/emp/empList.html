@@ -32,28 +32,29 @@
 			<tbody>
 				<tr th:each="emp, es : ${empList}" th:class="${es.odd} ? oddbg : _">
 				<!-- 기본은 empStat가 되지만 es라고 지정해줬다 -->
-					<td>[[${es.count}]] 
+					<td>[[${es.count}]]
 					<!-- <a th:href="@{empInfo(employeeId=${emp.employeeId}, name=${emp.firstName})}">[[${emp.employeeId}]]</a> -->
-					<a th:href="|javascript : empUpdate([[${emp.employeeId]])|">[[${emp.employeeId}]]</a>
+					<a th:href="|javascript:empUpdate(${emp.employeeId})|">[[${emp.employeeId}]]</a>
 					<a th:href="@{empInfo/{id}(id=${emp.employeeId})}">[[${emp.employeeId}]]</a>
 					</td>
 					<td th:text="|${emp.firstName} ${emp.lastName}|">king smith</td> <!-- + ' ' + 대신 따옴표 안에 || 써줬다 -->
 					<td th:text="${emp.departmentId}">개발</td>
 					<td th:text="${#dates.format(emp.hireDate, 'yyyy/MM/dd')}">2020/12/01</td>
 					<!-- <td th:text="${#numbers.formatCurrency(emp.salary == null ? 0 : emp.salary)}">30000</td> -->
-					<td th:text="${#numbers.formatDecimal(emp.salary, 3, 2)}">30000</td>
+					<td th:text="${#numbers.formatDecimal(emp.salary, 3, 'COMMA', 0, 'POINT')}">30000</td>
 				</tr>
 			</tbody>
 		</table>
 		<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+		<script src="/json.min.js"></script>
 		<script>
 			function empUpdate(id) {
-				$.ajax(`/employees/${id}`, {
-					dateType : "html"
+				$.ajax(`/empUpdate?employeeId=${id}`, {
+					dataType : "html"
 					})
 					.done(function(result) {
-						$("#empInsertDiv").html(JSON.stringify(result))
-					})				
+						$("#empInsertDiv").html(result)
+					})
 			}
 			/* $("#empInsertDiv").load("/empInsert", null, function() {
 				alert('load')
@@ -64,13 +65,13 @@
 			.done(function(result) {
 				$("#empInsertDiv").html(result);
 			}) */
-			$.ajax("/employees/100", {
+			/* $.ajax("/employees/100", {
 				dataType: "json"
 			})
 			.done(function(result) {
 				console.log(typeof result)
 				$("#empInsertDiv").html(JSON.stringify(result))
-			})
+			}) */
 		</script>
 	</div>
 </body>

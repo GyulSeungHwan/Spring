@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.user.mapper.UserMapper">
+	
+	<!-- 단건조회 -->
+	<select id="selectUserInfo" resultType="UserVO">
+		select id,
+			   login_id,
+			   password,
+			   full_name,
+			   dept_name
+		from t_user
+		where login_id = #{loginId}
+	</select>
+	
+	<!-- 권한조회 -->
+	<select id="selectRole" resultType="String">
+		select role_name
+		from t_role
+		where id = #{id}
+	</select>
+	
+</mapper>

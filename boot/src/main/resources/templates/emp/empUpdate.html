@@ -2,12 +2,11 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>사원 등록</title>
+<title>사원 수정</title>
 </head>
 <body>
-	<form th:action="@{/empUpdate}" method="POST" th:object="${empVO}">
-	<!-- th:object - name을 써서 값을 받지않고 th:field로 필드의 값을 받아올 수 있게 만든다 -->
-	<!-- th:object의 객체는 자동으로 만들어지지 않는다(컨트롤에서 객체를 생성해서 보내줘야한다) -->
+	<form id="frm" name="frm" th:object="${empVO}">
+	<!-- ajax로 보낼 때는 th:action이랑 method가 필요하지 않다 -->
 		<div>
 			<label id="empId">사원번호</label>
 			<input type="text" id="empId" th:field="*{employeeId}">
@@ -29,9 +28,34 @@
 			<input type="text" id="job" th:field="*{jobId}">
 		</div>
 		<div>
-			<button type="submit">등록</button>
+			<button type="button" id="save">등록</button>
 			<button type="reset">취소</button>
 		</div>
 	</form>
+	<script>
+		$("#save").on("click", function() {
+			$.ajax("employees", {
+				method : "put",
+				contentType : "application/json",
+				data : JSON.stringify($("#frm").serializeObject())
+				// data : $("#frm").serialize()
+			})
+			.done(result => {
+				alert("수정완료")
+			})
+		})
+		$("#save").on("click", function() {
+			fetch("employees", {
+				method : "PUT",
+				headers : {
+					'Content-Type' : 'application/json'
+					// 'Content-Type' : "application/x-www-form-urlencoded"
+				},
+				body : JSON.stringify($("#frm").serializeObject())
+				// body의 데이터 유형은 반드시 "Content-Type"
+				// body : new FormData(frm)
+			});
+		});
+	</script>
 </body>
 </html>

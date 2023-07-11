@@ -36,6 +36,7 @@ public class EmpRestController {
 	// 수정
 	@PutMapping("employees")
 	public EmpVO empUpdate(@RequestBody EmpVO vo) {
+		// @RequestBody가 있으면 json.stringify로 보내줘야 한다
 		System.out.println(vo);
 //		empService.insertEmpInfo(vo);
 		return vo;
