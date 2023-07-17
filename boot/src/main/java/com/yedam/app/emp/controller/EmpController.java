@@ -1,6 +1,9 @@
 package com.yedam.app.emp.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +21,19 @@ public class EmpController {
 	@Autowired
 	EmpService empService;
 	
+	private SimpMessagingTemplate template;
+
+    @Autowired
+    public EmpController(SimpMessagingTemplate template) {
+        this.template = template;
+    }
+	
 	// 전체조회 페이지
 	@GetMapping("empList")
 	public String empList(Model model) {
 		model.addAttribute("empList", empService.getEmpList());
+		String text = "[" + new Date() + "]:" + "사원목록조회";
+        this.template.convertAndSend("/topic/alam", text);
 		return "emp/empList";
 		// 폴더 안에 들어있다고 /empList로 하면 안된다(리눅스에서 에러남)
 		// 대소문자 구분해주기(리눅스에서 에러남)
